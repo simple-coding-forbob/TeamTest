@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+<!-- 오라클 DB 에 트랜잭션관리자를 연결합니다. -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+<!-- 자동 트랜잭션 실행 설정: 에러가 발생하면 자동 롤백되게 설정합니다. -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+<!-- 에러가 발생하면 자동 롤백되게하는 대상(범위) 폴더 위치 지정
+	사용법: execution(리턴값 패키지경로.클래스명(매개변수명))
+	..  : 하위경로들, *: 임의의 글자들
+	aop : 공통 기능(트랜잭션, 예외처리 등)을 프로그램 실행시에 자동으로 추가해 주는 기능 
+ -->
+	<aop:config>
+		<aop:pointcut id="requiredTx" expression="execution(* egovframework.example.*..impl.*Impl.*(..))"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="requiredTx" />
+	</aop:config>
+
+</beans>
