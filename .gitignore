@@ -4,6 +4,7 @@ SimpleMapper/target/
 SimpleMapper/src/test/
 SimpleMapper/.classpath
 SimpleMapper/.project
+.metadata/
 Servers/
 
 # Compiled class file
