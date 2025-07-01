@@ -1,3 +1,12 @@
+# 이클립스 제외할 폴더/파일
+MapperExam/.settings/
+MapperExam/target/
+MapperExam/src/test/
+MapperExam/.classpath
+MapperExam/.project
+Servers/
+.metadata/
+
 # Compiled class file
 *.class
 
